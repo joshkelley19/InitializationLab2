@@ -7,17 +7,18 @@ public class ThingContainer {
     public ThingContainer(int arraySize){
         colorfulThings= new ColorfulThing[arraySize];
     }
+
     public String add(ColorfulThing addedColorfulThing){
         if(arrayIndex<colorfulThings.length){
+            if(colorfulThings[arrayIndex]!=null)arrayIndex++;
             colorfulThings[arrayIndex]=addedColorfulThing;
-            arrayIndex++;
             return "Thing successfully added";
         }else return "ThingContainer is full!!!";
     }
     public void fillForTests(){
         ColorfulThing.ColorEnum[] filler = ColorfulThing.ColorEnum.values();
         for (int i=0,j=0; i<colorfulThings.length;i++,j=i%5){
-                colorfulThings[i]=new ColorfulThing(filler[j]);
+            this.add(new ColorfulThing(filler[j]));
                 arrayIndex=i;
         }
     }
@@ -33,11 +34,7 @@ public class ThingContainer {
         for (int i=0;i<=arrayIndex;i++) {
             ColorfulThing.ColorEnum current = colorfulThings[i].getColor();
             if(current==color){
-                ColorfulThing toBeReturned = colorfulThings[i];
-                colorfulThings[i]=null;
-                reorder(i);
-                arrayIndex--;
-                return toBeReturned;
+                return shuffle(i);
             }
         }
         return null;
@@ -46,14 +43,17 @@ public class ThingContainer {
     public ColorfulThing remove(ColorfulThing comparison){
         for (int i=0; i<arrayIndex;i++){
             if(colorfulThings[i].equals(comparison)){
-                ColorfulThing toBeReturned =colorfulThings[i];
-                colorfulThings[i]=null;
-                reorder(i);
-                arrayIndex--;
-                return toBeReturned;
+                return shuffle(i);
             }
         }
         return null;
+    }
+    public ColorfulThing shuffle(int emptied){
+        ColorfulThing toBeReturned = colorfulThings[emptied];
+        colorfulThings[emptied]=null;
+        reorder(emptied);
+        arrayIndex--;
+        return toBeReturned;
     }
     public void printThings(){
         for (int i=0;i<=arrayIndex;i++){
@@ -88,6 +88,14 @@ public class ThingContainer {
         thingContainer.printThings();
         System.out.println();
         System.out.println(thingContainer.remove(thingContainer.colorfulThings[5]).getColor());
+        System.out.println(thingContainer.remove(thingContainer.colorfulThings[5]).getColor());
+        System.out.println(thingContainer.remove(thingContainer.colorfulThings[5]).getColor());
+        System.out.println();
+        thingContainer.printThings();
+        System.out.println();
+        System.out.println(thingContainer.add(new ColorfulThing(ColorfulThing.ColorEnum.BLUE)));
+        System.out.println(thingContainer.add(new ColorfulThing(ColorfulThing.ColorEnum.BLUE)));
+        System.out.println(thingContainer.add(new ColorfulThing(ColorfulThing.ColorEnum.BLUE)));
         System.out.println();
         thingContainer.printThings();
 

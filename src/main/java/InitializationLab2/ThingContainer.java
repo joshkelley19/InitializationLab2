@@ -1,6 +1,5 @@
 package InitializationLab2;
 
-import java.lang.reflect.Array;
 
 public class ThingContainer {
     public ColorfulThing colorfulThings[];
@@ -31,45 +30,47 @@ public class ThingContainer {
         }else return null;
     }
     public ColorfulThing remove(ColorfulThing.ColorEnum color){
-        for (ColorfulThing i:colorfulThings) {
-            if(i.getColor()==color){
-                ColorfulThing toBeReturned = i;
-                i=null;
-                //reorder();
+        for (int i=0;i<=arrayIndex;i++) {
+            ColorfulThing.ColorEnum current = colorfulThings[i].getColor();
+            if(current==color){
+                ColorfulThing toBeReturned = colorfulThings[i];
+                colorfulThings[i]=null;
+                reorder(i);
+                arrayIndex--;
                 return toBeReturned;
             }
         }
         return null;
     }
-//    public ColorfulThing remove(ColorfulThing comparison){
-//        for (int i=0; i<colorfulThings.length;i++){
-//            if(colorfulThings[i].equals(comparison)){
-//                ColorfulThing toBeReturned =(ColorfulThing)Array.get(colorfulThings, i);
-//                for (int a = i,j=i+1;a<colorfulThings.length-3;i++,j++){
-//                    colorfulThings[a]=(ColorfulThing)Array.get(colorfulThings, j);
-//                }
-//                //colorfulThings[i]=null;
-//                //reorder();
-//                return toBeReturned;
-//            }
-//        }
-//        return null;
-//    }
+    //if calling array index doesn't work, call Array.get and cast to object type
+    public ColorfulThing remove(ColorfulThing comparison){
+        for (int i=0; i<arrayIndex;i++){
+            if(colorfulThings[i].equals(comparison)){
+                ColorfulThing toBeReturned =colorfulThings[i];
+                colorfulThings[i]=null;
+                reorder(i);
+                arrayIndex--;
+                return toBeReturned;
+            }
+        }
+        return null;
+    }
     public void printThings(){
         for (int i=0;i<=arrayIndex;i++){
             System.out.println(colorfulThings[i].getColor());
         }
     }
-//    public void reorder(){
-//        for (int i=0;i<colorfulThings.length;i++){
-//            if(colorfulThings[i].equals(null)){
-//                colorfulThings[i]=findNext(i);
-//            }
-//        }
-//    }
+    public void reorder(int spot){
+        for (int i=spot;i<arrayIndex;i++){
+            if(colorfulThings[i]==null){
+                colorfulThings[i]=findNext(i);
+                colorfulThings[i+1]=null;
+            }
+        }
+    }
     public ColorfulThing findNext(int i){
-        for(int shift = i;shift<colorfulThings.length;shift++){
-            if(colorfulThings[shift].equals(null)){
+        for(int shift = i;shift<=arrayIndex;shift++){
+            if(colorfulThings[shift]==null){
                 continue;
             }else return colorfulThings[shift];
         }
@@ -82,7 +83,12 @@ public class ThingContainer {
 //        ThingContainer thingContainer3 = new ThingContainer(2);
 
         ThingContainer thingContainer = new ThingContainer(10);
+
         thingContainer.fillForTests();
+        thingContainer.printThings();
+        System.out.println();
+        System.out.println(thingContainer.remove(thingContainer.colorfulThings[5]).getColor());
+        System.out.println();
         thingContainer.printThings();
 
 
